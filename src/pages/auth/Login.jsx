@@ -107,9 +107,7 @@ export default function Login() {
 
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-indigo-900 font-display">Sign In</h2>
-            <p className="text-gray-400 text-sm mt-1.5">
-              Access your business or admin dashboard
-            </p>
+           
           </div>
 
           
