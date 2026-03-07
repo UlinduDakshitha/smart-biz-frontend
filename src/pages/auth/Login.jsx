@@ -81,10 +81,7 @@ export default function Login() {
               <Building2 size={14} className="text-indigo-300" />
               <span className="text-xs font-medium text-indigo-200">Business Login</span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-2 border bg-amber-500/20 backdrop-blur rounded-xl border-amber-500/30">
-              <Shield size={14} className="text-amber-400" />
-              <span className="text-xs font-medium text-amber-300">Admin Login</span>
-            </div>
+             
           </div>
           
         </div>
