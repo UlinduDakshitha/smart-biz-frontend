@@ -188,8 +188,7 @@ export default function Login() {
 
           {/* Admin hint */}
           <div className="pt-6 mt-8 border-t border-gray-200">
-            <div className="flex items-center justify-center gap-2">
-               
+            <div className="flex items-center justify-center gap-2"> 
             </div>
           </div>
         </div>
