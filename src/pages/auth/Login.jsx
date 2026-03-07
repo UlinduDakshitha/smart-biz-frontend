@@ -77,10 +77,7 @@ export default function Login() {
 
           {/* Role hint badges */}
           <div className="flex gap-3 pt-2">
-            <div className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur rounded-xl">
-              <Building2 size={14} className="text-indigo-300" />
-              <span className="text-xs font-medium text-indigo-200">Business Login</span>
-            </div>
+             
              
           </div>
           
