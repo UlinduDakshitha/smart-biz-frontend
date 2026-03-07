@@ -112,14 +112,7 @@ export default function Login() {
             </p>
           </div>
 
-          {/* Role tip */}
-          <div className="flex items-start gap-3 p-4 mb-6 border border-indigo-100 bg-indigo-50 rounded-2xl">
-            <Lock size={15} className="text-indigo-400 mt-0.5 shrink-0" />
-            <p className="text-xs leading-relaxed text-indigo-500">
-              <span className="font-semibold text-indigo-600">Single sign-in for everyone.</span>{' '}
-              Admins and business owners use the same form — you'll be redirected to your dashboard automatically.
-            </p>
-          </div>
+          
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
