@@ -36,27 +36,27 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="flex min-h-screen">
       {/* Left panel — branding */}
       <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-[#1e1b4b] via-[#312e81] to-[#4338ca] flex-col justify-between p-14 relative overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-48 translate-x-48" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-white/5 rounded-full translate-y-36 -translate-x-36" />
+        <div className="absolute top-0 right-0 translate-x-48 -translate-y-48 rounded-full w-96 h-96 bg-white/5" />
+        <div className="absolute bottom-0 left-0 rounded-full w-72 h-72 bg-white/5 translate-y-36 -translate-x-36" />
 
         {/* Logo */}
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-11 h-11 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-2xl flex items-center justify-center shadow-xl">
+          <div className="flex items-center justify-center shadow-xl w-11 h-11 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-2xl">
             <Zap size={22} className="text-white" />
           </div>
           <div>
-            <h1 className="font-display text-white font-bold text-2xl leading-none">SmartBiz</h1>
+            <h1 className="text-2xl font-bold leading-none text-white font-display">SmartBiz</h1>
             <p className="text-indigo-300 text-xs mt-0.5">AI-Powered Business Suite</p>
           </div>
         </div>
 
         {/* Feature list */}
         <div className="relative z-10 space-y-6">
-          <h2 className="font-display text-4xl font-bold text-white leading-tight">
+          <h2 className="text-4xl font-bold leading-tight text-white font-display">
             Run your business<br />
             <span className="text-indigo-300">smarter, not harder.</span>
           </h2>
@@ -67,31 +67,31 @@ export default function Login() {
               { icon: Shield, text: 'Secure access for both admins and businesses' },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-white/10 rounded-xl flex items-center justify-center shrink-0">
+                <div className="flex items-center justify-center w-8 h-8 bg-white/10 rounded-xl shrink-0">
                   <Icon size={15} className="text-indigo-300" />
                 </div>
-                <p className="text-indigo-100 text-sm">{text}</p>
+                <p className="text-sm text-indigo-100">{text}</p>
               </div>
             ))}
           </div>
 
           {/* Role hint badges */}
           <div className="flex gap-3 pt-2">
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur rounded-xl px-3 py-2">
+            <div className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur rounded-xl">
               <Building2 size={14} className="text-indigo-300" />
-              <span className="text-xs text-indigo-200 font-medium">Business Login</span>
+              <span className="text-xs font-medium text-indigo-200">Business Login</span>
             </div>
-            <div className="flex items-center gap-2 bg-amber-500/20 backdrop-blur rounded-xl px-3 py-2 border border-amber-500/30">
+            <div className="flex items-center gap-2 px-3 py-2 border bg-amber-500/20 backdrop-blur rounded-xl border-amber-500/30">
               <Shield size={14} className="text-amber-400" />
-              <span className="text-xs text-amber-300 font-medium">Admin Login</span>
+              <span className="text-xs font-medium text-amber-300">Admin Login</span>
             </div>
           </div>
-          <p className="text-indigo-400 text-xs">
+          <p className="text-xs text-indigo-400">
             ✓ Use the same login form — the system auto-detects your role.
           </p>
         </div>
 
-        <p className="relative z-10 text-indigo-500 text-xs">© 2024 SmartBiz. All rights reserved.</p>
+        <p className="relative z-10 text-xs text-indigo-500">© 2024 SmartBiz. All rights reserved.</p>
       </div>
 
       {/* Right panel — form */}
@@ -99,23 +99,23 @@ export default function Login() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex items-center gap-3 mb-8 lg:hidden">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl">
               <Zap size={18} className="text-white" />
             </div>
-            <h1 className="font-display text-xl font-bold text-indigo-900">SmartBiz</h1>
+            <h1 className="text-xl font-bold text-indigo-900 font-display">SmartBiz</h1>
           </div>
 
           <div className="mb-8">
-            <h2 className="font-display text-3xl font-bold text-indigo-900">Sign In</h2>
+            <h2 className="text-3xl font-bold text-indigo-900 font-display">Sign In</h2>
             <p className="text-gray-400 text-sm mt-1.5">
               Access your business or admin dashboard
             </p>
           </div>
 
           {/* Role tip */}
-          <div className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 rounded-2xl p-4 mb-6">
+          <div className="flex items-start gap-3 p-4 mb-6 border border-indigo-100 bg-indigo-50 rounded-2xl">
             <Lock size={15} className="text-indigo-400 mt-0.5 shrink-0" />
-            <p className="text-xs text-indigo-500 leading-relaxed">
+            <p className="text-xs leading-relaxed text-indigo-500">
               <span className="font-semibold text-indigo-600">Single sign-in for everyone.</span>{' '}
               Admins and business owners use the same form — you'll be redirected to your dashboard automatically.
             </p>
@@ -140,7 +140,7 @@ export default function Login() {
                 <label className="label">Password</label>
                 <Link
                   to="/forgot-password"
-                  className="text-xs text-primary-500 hover:text-primary-700 font-medium transition-colors"
+                  className="text-xs font-medium transition-colors text-primary-500 hover:text-primary-700"
                 >
                   Forgot password?
                 </Link>
@@ -157,7 +157,7 @@ export default function Login() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute text-gray-400 transition-colors -translate-y-1/2 right-3 top-1/2 hover:text-gray-600"
                   onClick={() => setShowPass(!showPass)}
                   tabIndex={-1}
                 >
@@ -172,27 +172,24 @@ export default function Login() {
               className="btn-primary w-full py-3.5 text-base font-semibold flex items-center justify-center gap-2 group"
             >
               {loading ? (
-                <><div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Signing in…</>
+                <><div className="w-5 h-5 border-2 rounded-full border-white/40 border-t-white animate-spin" /> Signing in…</>
               ) : (
-                <>Sign In <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></>
+                <>Sign In <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /></>
               )}
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="mt-6 text-sm text-center text-gray-500">
             Don't have an account?{' '}
-            <Link to="/register" className="text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+            <Link to="/register" className="font-semibold transition-colors text-primary-600 hover:text-primary-700">
               Register your business
             </Link>
           </p>
 
           {/* Admin hint */}
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <div className="flex items-center gap-2 justify-center">
-              <Shield size={13} className="text-amber-500" />
-              <p className="text-xs text-gray-400">
-                Administrators — use your admin email and password above.
-              </p>
+          <div className="pt-6 mt-8 border-t border-gray-200">
+            <div className="flex items-center justify-center gap-2">
+               
             </div>
           </div>
         </div>
