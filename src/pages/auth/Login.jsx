@@ -64,7 +64,7 @@ export default function Login() {
             {[
               { icon: Building2, text: 'One platform for invoices, expenses & inventory' },
               { icon: Zap, text: 'AI-powered insights and email generation' },
-              { icon: Shield, text: 'Secure access for both admins and businesses' },
+              
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-3">
                 <div className="flex items-center justify-center w-8 h-8 bg-white/10 rounded-xl shrink-0">
@@ -77,7 +77,6 @@ export default function Login() {
 
           {/* Role hint badges */}
           <div className="flex gap-3 pt-2">
-             
              
           </div>
           
