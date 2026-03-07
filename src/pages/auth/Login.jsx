@@ -86,9 +86,7 @@ export default function Login() {
               <span className="text-xs font-medium text-amber-300">Admin Login</span>
             </div>
           </div>
-          <p className="text-xs text-indigo-400">
-            ✓ Use the same login form — the system auto-detects your role.
-          </p>
+          
         </div>
 
         <p className="relative z-10 text-xs text-indigo-500">© 2024 SmartBiz. All rights reserved.</p>
