@@ -30,15 +30,14 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#312e81] via-[#4338ca] to-[#1e1b4b] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-white/15 backdrop-blur rounded-2xl mb-4">
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center justify-center mb-4 w-14 h-14 bg-white/15 backdrop-blur rounded-2xl">
             <Zap size={28} className="text-white" />
           </div>
-          <h1 className="font-display text-3xl font-bold text-white">SmartBiz</h1>
-          <p className="text-indigo-200 mt-1">Register your business</p>
+          <h1 className="text-3xl font-bold text-white font-display">SmartBiz</h1>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl p-8">
+        <div className="p-8 bg-white shadow-2xl rounded-3xl">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="label">Business Name</label>
@@ -62,18 +61,18 @@ export default function Register() {
             </div>
             <div>
               <label className="label">Address</label>
-              <textarea className="input resize-none h-20" placeholder="Business address" value={form.address}
+              <textarea className="h-20 resize-none input" placeholder="Business address" value={form.address}
                 onChange={e => setForm({ ...form, address: e.target.value })} />
             </div>
 
-            <button type="submit" className="btn-primary w-full py-3 text-base font-semibold" disabled={loading}>
+            <button type="submit" className="w-full py-3 text-base font-semibold btn-primary" disabled={loading}>
               {loading ? 'Registering...' : 'Create Account'}
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="mt-6 text-sm text-center text-gray-500">
             Already registered?{' '}
-            <Link to="/login" className="text-primary-600 font-semibold hover:text-primary-700">Sign in</Link>
+            <Link to="/login" className="font-semibold text-primary-600 hover:text-primary-700">Sign in</Link>
           </p>
         </div>
       </div>
