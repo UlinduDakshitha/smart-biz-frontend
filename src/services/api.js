@@ -88,6 +88,7 @@ export const aiAPI = {
   getHistory: () => api.get('/ai/history'),
 };
 
+
 // Admin
 export const adminAPI = {
   getBusinesses: () => api.get('/admin/businesses'),
