@@ -26,6 +26,7 @@ export default function ForgotPassword() {
       return () => clearTimeout(t);
     }
   }, [countdown]);
+  
 
   // ── Step 1 — Submit email ───────────────────────────────────────────────
   const handleEmailSubmit = async (e) => {
@@ -130,29 +131,29 @@ export default function ForgotPassword() {
         {step !== 'done' && (
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-600 text-sm font-medium mb-8 transition-colors group"
+            className="inline-flex items-center gap-2 mb-8 text-sm font-medium text-indigo-400 transition-colors hover:text-indigo-600 group"
           >
-            <ArrowLeft size={15} className="group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft size={15} className="transition-transform group-hover:-translate-x-1" />
             Back to Login
           </Link>
         )}
 
-        <div className="bg-white rounded-3xl shadow-xl border border-indigo-50 overflow-hidden">
+        <div className="overflow-hidden bg-white border shadow-xl rounded-3xl border-indigo-50">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#312e81] to-[#4f46e5] px-8 pt-8 pb-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-white/15 rounded-2xl flex items-center justify-center">
+              <div className="flex items-center justify-center w-10 h-10 bg-white/15 rounded-2xl">
                 <Zap size={18} className="text-white" />
               </div>
-              <h1 className="font-display text-white font-bold text-lg">SmartBiz</h1>
+              <h1 className="text-lg font-bold text-white font-display">SmartBiz</h1>
             </div>
-            <h2 className="font-display text-2xl font-bold text-white">
+            <h2 className="text-2xl font-bold text-white font-display">
               {step === 'email' && 'Forgot Password?'}
               {step === 'otp' && 'Check Your Email'}
               {step === 'reset' && 'Create New Password'}
               {step === 'done' && 'Password Reset!'}
             </h2>
-            <p className="text-indigo-200 text-sm mt-1">
+            <p className="mt-1 text-sm text-indigo-200">
               {step === 'email' && "Enter your registered email and we'll send a 6-digit OTP."}
               {step === 'otp' && `We sent a 6-digit code to ${email}`}
               {step === 'reset' && 'Choose a strong new password for your account.'}
@@ -184,7 +185,7 @@ export default function ForgotPassword() {
                     <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="email"
-                      className="input pl-10"
+                      className="pl-10 input"
                       placeholder="your@email.com"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
@@ -199,7 +200,7 @@ export default function ForgotPassword() {
                   disabled={loading}
                 >
                   {loading
-                    ? <><div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Sending OTP…</>
+                    ? <><div className="w-5 h-5 border-2 rounded-full border-white/40 border-t-white animate-spin" /> Sending OTP…</>
                     : <><Mail size={16} /> Send OTP</>}
                 </button>
               </form>
@@ -209,7 +210,7 @@ export default function ForgotPassword() {
             {step === 'otp' && (
               <form onSubmit={handleOtpSubmit} className="space-y-6 fade-in">
                 <div>
-                  <label className="label text-center block mb-4">Enter the 6-digit code</label>
+                  <label className="block mb-4 text-center label">Enter the 6-digit code</label>
                   <div className="flex justify-center gap-2.5" onPaste={handleOtpPaste}>
                     {otp.map((digit, i) => (
                       <input
@@ -238,7 +239,7 @@ export default function ForgotPassword() {
                   disabled={loading || otp.join('').length < 6}
                 >
                   {loading
-                    ? <><div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Verifying…</>
+                    ? <><div className="w-5 h-5 border-2 rounded-full border-white/40 border-t-white animate-spin" /> Verifying…</>
                     : <><KeyRound size={16} /> Verify OTP</>}
                 </button>
 
@@ -261,7 +262,7 @@ export default function ForgotPassword() {
                 <button
                   type="button"
                   onClick={() => { setStep('email'); setOtp(['','','','','','']); }}
-                  className="w-full text-center text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                  className="w-full text-xs text-center text-gray-400 transition-colors hover:text-gray-600"
                 >
                   Change email address
                 </button>
@@ -285,7 +286,7 @@ export default function ForgotPassword() {
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute text-gray-400 -translate-y-1/2 right-3 top-1/2 hover:text-gray-600"
                       onClick={() => setShowPass(!showPass)}
                       tabIndex={-1}
                     >
@@ -295,7 +296,7 @@ export default function ForgotPassword() {
 
                   {/* Password strength */}
                   {newPassword && (
-                    <div className="mt-2 flex gap-1">
+                    <div className="flex gap-1 mt-2">
                       {[1, 2, 3, 4].map(n => (
                         <div key={n} className={`h-1 flex-1 rounded-full transition-all ${
                           newPassword.length >= n * 3
@@ -320,7 +321,7 @@ export default function ForgotPassword() {
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute text-gray-400 -translate-y-1/2 right-3 top-1/2 hover:text-gray-600"
                       onClick={() => setShowConfirm(!showConfirm)}
                       tabIndex={-1}
                     >
@@ -343,7 +344,7 @@ export default function ForgotPassword() {
                   disabled={loading || newPassword !== confirmPassword}
                 >
                   {loading
-                    ? <><div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Resetting…</>
+                    ? <><div className="w-5 h-5 border-2 rounded-full border-white/40 border-t-white animate-spin" /> Resetting…</>
                     : <><ShieldCheck size={16} /> Reset Password</>}
                 </button>
               </form>
@@ -351,12 +352,12 @@ export default function ForgotPassword() {
 
             {/* ── Step 4: Done ── */}
             {step === 'done' && (
-              <div className="text-center py-6 fade-in">
-                <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5">
+              <div className="py-6 text-center fade-in">
+                <div className="flex items-center justify-center w-20 h-20 mx-auto mb-5 rounded-full bg-emerald-50">
                   <CheckCircle2 size={40} className="text-emerald-500" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-indigo-900 mb-2">All Done!</h3>
-                <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+                <h3 className="mb-2 text-xl font-bold text-indigo-900 font-display">All Done!</h3>
+                <p className="mb-8 text-sm leading-relaxed text-gray-500">
                   Your password has been reset successfully.<br />
                   You can now sign in with your new password.
                 </p>
