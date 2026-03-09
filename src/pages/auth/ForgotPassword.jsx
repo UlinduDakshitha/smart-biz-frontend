@@ -44,6 +44,7 @@ export default function ForgotPassword() {
     }
   };
 
+  
   // ── OTP input handling ──────────────────────────────────────────────────
   const handleOtpChange = (i, val) => {
     if (!/^\d?$/.test(val)) return;
