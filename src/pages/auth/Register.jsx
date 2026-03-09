@@ -28,7 +28,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#9e9bd1] via-[#a39fcc] to-[#1e1b4b] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#9e9bd1] via-[#a39fcc] to-[#8d8ca0] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="inline-flex items-center justify-center mb-4 w-14 h-14 bg-white/15 backdrop-blur rounded-2xl">
