@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { Zap, ArrowLeft, Mail, KeyRound, ShieldCheck, Eye, EyeOff, CheckCircle2, RefreshCw } from 'lucide-react';
+import AuthBackground from '../../components/layout/AuthBackground';
 
 const STEPS = ['email', 'otp', 'reset', 'done'];
 
@@ -126,18 +127,20 @@ export default function ForgotPassword() {
   const stepIndex = STEPS.indexOf(step);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f8f9ff] via-[#eef2ff] to-[#e0e9ff] flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Back link */}
-        {step !== 'done' && (
-          <Link
-            to="/login"
-            className="inline-flex items-center gap-2 mb-8 text-sm font-medium text-indigo-400 transition-colors hover:text-indigo-600 group"
-          >
-            <ArrowLeft size={15} className="transition-transform group-hover:-translate-x-1" />
-            Back to Login
-          </Link>
-        )}
+    <>
+      <AuthBackground />
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <div className="w-full max-w-md">
+          {/* Back link */}
+          {step !== 'done' && (
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 mb-6 text-sm font-medium text-white/80 transition-colors hover:text-white group"
+            >
+              <ArrowLeft size={15} className="transition-transform group-hover:-translate-x-1" />
+              Back to Login
+            </Link>
+          )}
 
         <div className="overflow-hidden bg-white border shadow-xl rounded-3xl border-indigo-50">
           {/* Header */}
@@ -249,7 +252,7 @@ export default function ForgotPassword() {
                     type="button"
                     onClick={handleResend}
                     disabled={countdown > 0 || loading}
-                    className={`inline-flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                    className={`group inline-flex items-center gap-1.5 text-sm font-medium transition-colors ${
                       countdown > 0
                         ? 'text-gray-300 cursor-not-allowed'
                         : 'text-primary-500 hover:text-primary-700'
@@ -374,5 +377,6 @@ export default function ForgotPassword() {
         </div>
       </div>
     </div>
-  );
+  </>
+);
 }

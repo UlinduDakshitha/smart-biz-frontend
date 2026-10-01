@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supplierAPI } from '../../services/api';
 import CrudTable from '../../components/ui/CrudTable';
 import Modal from '../../components/ui/Modal';
+import ConfirmDeleteModal from '../../components/ui/ConfirmDeleteModal';
 import toast from 'react-hot-toast';
 
 const emptyForm = { name: '', email: '', phone: '' };
@@ -13,6 +14,8 @@ export default function Suppliers() {
   const [form, setForm] = useState(emptyForm);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -41,10 +44,19 @@ export default function Suppliers() {
     } finally { setSaving(false); }
   };
 
-  const handleDelete = async (row) => {
-    if (!confirm(`Delete supplier "${row.name}"?`)) return;
-    try { await supplierAPI.delete(row.supplierId); toast.success('Deleted'); load(); }
-    catch { toast.error('Failed to delete'); }
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await supplierAPI.delete(deleteTarget.supplierId);
+      toast.success('Supplier deleted');
+      setDeleteTarget(null);
+      load();
+    } catch {
+      toast.error('Failed to delete');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const columns = [
@@ -57,7 +69,7 @@ export default function Suppliers() {
   return (
     <>
       <CrudTable title="Suppliers" data={data} columns={columns} loading={loading}
-        onAdd={openAdd} onEdit={openEdit} onDelete={handleDelete} searchKeys={['name', 'email']} />
+        onAdd={openAdd} onEdit={openEdit} onDelete={setDeleteTarget} searchKeys={['name', 'email']} />
 
       <Modal open={modal} onClose={() => setModal(false)} title={editing ? 'Edit Supplier' : 'Add Supplier'}>
         <form onSubmit={handleSave} className="space-y-4">
@@ -79,6 +91,16 @@ export default function Suppliers() {
           </div>
         </form>
       </Modal>
+
+      <ConfirmDeleteModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Delete Supplier"
+        itemName={deleteTarget?.name}
+        description="Are you sure you want to delete this supplier? Products linked to this supplier may be affected."
+        loading={deleting}
+      />
     </>
   );
 }

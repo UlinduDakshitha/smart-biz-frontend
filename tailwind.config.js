@@ -26,8 +26,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['DM Sans', 'sans-serif'],
-        display: ['Syne', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       boxShadow: {

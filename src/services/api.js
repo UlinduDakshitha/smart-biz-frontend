@@ -14,7 +14,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const isAuthEndpoint = err.config?.url?.includes('/auth/');
+    const isAuthPage = ['/login', '/register', '/forgot-password'].includes(window.location.pathname);
+    if (err.response?.status === 401 && !isAuthEndpoint && !isAuthPage) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
@@ -101,4 +103,11 @@ export const adminAPI = {
   deleteSubscription: (id) => api.delete(`/admin/subscriptions/${id}`),
 };
 
+// Business Profile
+export const businessProfileAPI = {
+  get: () => api.get('/business/profile'),
+
+  update: (data) =>
+    api.put('/business/profile', data),
+};
 export default api;

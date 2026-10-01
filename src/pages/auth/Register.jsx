@@ -13,6 +13,7 @@ export default function Register() {
     password: "",
     phone: "",
     address: "",
+    currency: "LKR",
   });
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -88,7 +89,7 @@ export default function Register() {
                 <label className="label">Phone</label>
                 <input
                   className="input"
-                  placeholder="+1 234 567 8900"
+                  placeholder="077 123 4567"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 />

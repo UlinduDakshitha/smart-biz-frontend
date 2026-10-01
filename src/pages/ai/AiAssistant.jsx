@@ -6,7 +6,7 @@ import { Sparkles, Send, FileText, Mail, ShoppingBag, BarChart3, Loader } from '
 const FEATURES = [
   { id: 'INSIGHTS', label: 'Business Insights', icon: BarChart3, color: 'from-blue-500 to-indigo-600', placeholder: 'Ask anything about your business... e.g. "How can I improve my sales this month?"' },
   { id: 'EMAIL', label: 'Email Composer', icon: Mail, color: 'from-emerald-500 to-teal-600', placeholder: 'Describe the email you need... e.g. "Write a thank-you email to a loyal customer"' },
-  { id: 'INVOICE_SUMMARY', label: 'Invoice Summary', icon: FileText, color: 'from-amber-500 to-orange-600', placeholder: 'Describe the invoice... e.g. "Invoice #42 for 10 laptops at $999 each"' },
+  { id: 'INVOICE_SUMMARY', label: 'Invoice Summary', icon: FileText, color: 'from-amber-500 to-orange-600', placeholder: 'Describe the invoice... e.g. "Invoice #42 for 10 items at Rs. 2,500 each"' },
   { id: 'SOCIAL_MEDIA', label: 'Social Media Post', icon: ShoppingBag, color: 'from-pink-500 to-rose-600', placeholder: 'Describe your post... e.g. "Write a Facebook post for 30% off weekend sale"' },
 ];
 

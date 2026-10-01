@@ -66,9 +66,9 @@ export default function InvoiceDetail() {
               {invoice.items?.map((item, i) => (
                 <tr key={i} className="border-t border-indigo-50">
                   <td className="px-4 py-3 font-medium text-indigo-900">{item.product?.name}</td>
-                  <td className="px-4 py-3 text-right text-gray-600">${Number(item.price).toFixed(2)}</td>
+                  <td className="px-4 py-3 text-right text-gray-600">Rs. {Number(item.price).toFixed(2)}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{item.quantity}</td>
-                  <td className="px-4 py-3 text-right font-semibold text-indigo-900">${(Number(item.price) * item.quantity).toFixed(2)}</td>
+                  <td className="px-4 py-3 text-right font-semibold text-indigo-900">Rs. {(Number(item.price) * item.quantity).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -80,7 +80,7 @@ export default function InvoiceDetail() {
           <div className="w-64">
             <div className="flex justify-between py-3 border-t border-indigo-100">
               <span className="font-bold text-indigo-900">Total Amount</span>
-              <span className="font-display text-xl font-bold text-emerald-600">${Number(invoice.totalAmount).toFixed(2)}</span>
+              <span className="font-display text-xl font-bold text-emerald-600">Rs. {Number(invoice.totalAmount).toLocaleString('en-LK', { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
         </div>

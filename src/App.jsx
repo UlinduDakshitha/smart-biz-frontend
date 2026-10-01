@@ -21,6 +21,8 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminBusinesses from './pages/admin/AdminBusinesses';
 import AdminSubscriptions from './pages/admin/AdminSubscriptions';
 import AdminAiUsage from './pages/admin/AdminAiUsage';
+import BusinessProfile
+  from './pages/profile/BusinessProfile';
 
 function Spinner() {
   return (
@@ -52,9 +54,9 @@ function PublicRoute({ children }) {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Toaster position="top-right" toastOptions={{
-          style: { fontFamily: 'DM Sans, sans-serif', borderRadius: '12px', fontSize: '14px' },
+          style: { fontFamily: 'Inter, system-ui, sans-serif', borderRadius: '12px', fontSize: '14px' },
         }} />
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
@@ -74,6 +76,10 @@ export default function App() {
             <Route path="/invoices" element={<Invoices />} />
             <Route path="/invoices/:id" element={<InvoiceDetail />} />
             <Route path="/ai" element={<AiAssistant />} />
+            <Route
+  path="/profile"
+  element={<BusinessProfile />}
+/>
           </Route>
 
           {/* ── Admin ── */}

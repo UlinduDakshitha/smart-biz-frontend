@@ -40,7 +40,7 @@ export default function Dashboard() {
     </div>
   );
 
-  const formatCurrency = (val) => `$${Number(val || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+  const formatCurrency = (val) => `Rs. ${Number(val || 0).toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   return (
     <div className="p-8">

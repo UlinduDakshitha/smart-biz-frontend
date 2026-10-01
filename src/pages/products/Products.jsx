@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { productAPI, supplierAPI } from '../../services/api';
 import CrudTable from '../../components/ui/CrudTable';
 import Modal from '../../components/ui/Modal';
+import ConfirmDeleteModal from '../../components/ui/ConfirmDeleteModal';
 import toast from 'react-hot-toast';
 
 const emptyForm = { name: '', price: '', stockQty: '', supplierId: '' };
@@ -14,6 +15,8 @@ export default function Products() {
   const [form, setForm] = useState(emptyForm);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -52,16 +55,25 @@ export default function Products() {
     } finally { setSaving(false); }
   };
 
-  const handleDelete = async (row) => {
-    if (!confirm(`Delete "${row.name}"?`)) return;
-    try { await productAPI.delete(row.productId); toast.success('Deleted'); load(); }
-    catch { toast.error('Failed to delete'); }
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await productAPI.delete(deleteTarget.productId);
+      toast.success('Product deleted');
+      setDeleteTarget(null);
+      load();
+    } catch {
+      toast.error('Failed to delete');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const columns = [
     { key: 'productId', label: '#' },
     { key: 'name', label: 'Product Name' },
-    { key: 'price', label: 'Price', render: row => `$${Number(row.price).toFixed(2)}` },
+    { key: 'price', label: 'Price', render: row => `Rs. ${Number(row.price).toLocaleString('en-LK', { minimumFractionDigits: 2 })}` },
     { key: 'stockQty', label: 'Stock', render: row => (
       <span className={row.stockQty <= 5 ? 'badge-red' : 'badge-green'}>{row.stockQty} units</span>
     )},
@@ -71,7 +83,7 @@ export default function Products() {
   return (
     <>
       <CrudTable title="Products" data={data} columns={columns} loading={loading}
-        onAdd={openAdd} onEdit={openEdit} onDelete={handleDelete} searchKeys={['name']} />
+        onAdd={openAdd} onEdit={openEdit} onDelete={setDeleteTarget} searchKeys={['name']} />
 
       <Modal open={modal} onClose={() => setModal(false)} title={editing ? 'Edit Product' : 'Add Product'}>
         <form onSubmit={handleSave} className="space-y-4">
@@ -81,7 +93,7 @@ export default function Products() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="label">Price ($) *</label>
+              <label className="label">Price (Rs.) *</label>
               <input type="number" step="0.01" className="input" value={form.price}
                 onChange={e => setForm({ ...form, price: e.target.value })} required />
             </div>
@@ -104,6 +116,16 @@ export default function Products() {
           </div>
         </form>
       </Modal>
+
+      <ConfirmDeleteModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Delete Product"
+        itemName={deleteTarget?.name}
+        description="Are you sure you want to delete this product? Inventory records will be updated accordingly."
+        loading={deleting}
+      />
     </>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { expenseAPI } from '../../services/api';
 import CrudTable from '../../components/ui/CrudTable';
 import Modal from '../../components/ui/Modal';
+import ConfirmDeleteModal from '../../components/ui/ConfirmDeleteModal';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 
@@ -15,6 +16,8 @@ export default function Expenses() {
   const [form, setForm] = useState(emptyForm);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -43,10 +46,19 @@ export default function Expenses() {
     } finally { setSaving(false); }
   };
 
-  const handleDelete = async (row) => {
-    if (!confirm('Delete this expense?')) return;
-    try { await expenseAPI.delete(row.expenseId); toast.success('Deleted'); load(); }
-    catch { toast.error('Failed to delete'); }
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await expenseAPI.delete(deleteTarget.expenseId);
+      toast.success('Expense deleted');
+      setDeleteTarget(null);
+      load();
+    } catch {
+      toast.error('Failed to delete');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const totalExpenses = data.reduce((sum, e) => sum + Number(e.amount || 0), 0);
@@ -54,7 +66,7 @@ export default function Expenses() {
   const columns = [
     { key: 'expenseId', label: '#' },
     { key: 'description', label: 'Description' },
-    { key: 'amount', label: 'Amount', render: row => <span className="font-semibold text-rose-600">${Number(row.amount).toFixed(2)}</span> },
+    { key: 'amount', label: 'Amount', render: row => <span className="font-semibold text-rose-600">Rs. {Number(row.amount).toLocaleString('en-LK', { minimumFractionDigits: 2 })}</span> },
     { key: 'date', label: 'Date' },
   ];
 
@@ -63,12 +75,12 @@ export default function Expenses() {
       <div className="px-8 pt-8">
         <div className="card bg-gradient-to-r from-rose-50 to-red-50 border-rose-100 mb-0">
           <p className="text-xs font-semibold text-rose-400 uppercase tracking-wider">Total Expenses (All Time)</p>
-          <p className="text-3xl font-display font-bold text-rose-600 mt-1">${totalExpenses.toFixed(2)}</p>
+          <p className="text-3xl font-display font-bold text-rose-600 mt-1">Rs. {totalExpenses.toLocaleString('en-LK', { minimumFractionDigits: 2 })}</p>
         </div>
       </div>
 
       <CrudTable title="Expenses" data={data} columns={columns} loading={loading}
-        onAdd={openAdd} onEdit={openEdit} onDelete={handleDelete} searchKeys={['description']} />
+        onAdd={openAdd} onEdit={openEdit} onDelete={setDeleteTarget} searchKeys={['description']} />
 
       <Modal open={modal} onClose={() => setModal(false)} title={editing ? 'Edit Expense' : 'Add Expense'}>
         <form onSubmit={handleSave} className="space-y-4">
@@ -79,7 +91,7 @@ export default function Expenses() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="label">Amount ($) *</label>
+              <label className="label">Amount (Rs.) *</label>
               <input type="number" step="0.01" className="input" value={form.amount}
                 onChange={e => setForm({ ...form, amount: e.target.value })} required />
             </div>
@@ -95,6 +107,16 @@ export default function Expenses() {
           </div>
         </form>
       </Modal>
+
+      <ConfirmDeleteModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Delete Expense"
+        itemName={deleteTarget ? `Rs. ${Number(deleteTarget.amount || 0).toLocaleString('en-LK', { minimumFractionDigits: 2 })} - ${deleteTarget.description}` : ''}
+        description="Are you sure you want to delete this expense record? This will adjust your overall financial calculations."
+        loading={deleting}
+      />
     </>
   );
 }

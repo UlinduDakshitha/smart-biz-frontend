@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { customerAPI } from '../../services/api';
 import CrudTable from '../../components/ui/CrudTable';
 import Modal from '../../components/ui/Modal';
+import ConfirmDeleteModal from '../../components/ui/ConfirmDeleteModal';
 import toast from 'react-hot-toast';
 
 const emptyForm = { name: '', email: '', phone: '', address: '' };
@@ -13,6 +14,8 @@ export default function Customers() {
   const [form, setForm] = useState(emptyForm);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -48,13 +51,19 @@ export default function Customers() {
     }
   };
 
-  const handleDelete = async (row) => {
-    if (!confirm(`Delete customer "${row.name}"?`)) return;
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await customerAPI.delete(row.customerId);
+      await customerAPI.delete(deleteTarget.customerId);
       toast.success('Customer deleted');
+      setDeleteTarget(null);
       load();
-    } catch { toast.error('Failed to delete'); }
+    } catch {
+      toast.error('Failed to delete');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const columns = [
@@ -74,7 +83,7 @@ export default function Customers() {
         loading={loading}
         onAdd={openAdd}
         onEdit={openEdit}
-        onDelete={handleDelete}
+        onDelete={setDeleteTarget}
         searchKeys={['name', 'email', 'phone']}
       />
 
@@ -102,6 +111,16 @@ export default function Customers() {
           </div>
         </form>
       </Modal>
+
+      <ConfirmDeleteModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Delete Customer"
+        itemName={deleteTarget?.name}
+        description="Are you sure you want to delete this customer? This will remove all their details from your records."
+        loading={deleting}
+      />
     </>
   );
 }

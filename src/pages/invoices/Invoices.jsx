@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { invoiceAPI, customerAPI, productAPI } from '../../services/api';
 import CrudTable from '../../components/ui/CrudTable';
 import Modal from '../../components/ui/Modal';
+import ConfirmDeleteModal from '../../components/ui/ConfirmDeleteModal';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, Eye } from 'lucide-react';
@@ -15,6 +16,8 @@ export default function Invoices() {
   const [customerId, setCustomerId] = useState('');
   const [items, setItems] = useState([{ productId: '', quantity: 1 }]);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
 
   const load = () => {
@@ -63,16 +66,25 @@ export default function Invoices() {
     } finally { setSaving(false); }
   };
 
-  const handleDelete = async (row) => {
-    if (!confirm(`Delete Invoice #${row.invoiceId}?`)) return;
-    try { await invoiceAPI.delete(row.invoiceId); toast.success('Invoice deleted'); load(); }
-    catch { toast.error('Failed to delete'); }
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await invoiceAPI.delete(deleteTarget.invoiceId);
+      toast.success('Invoice deleted');
+      setDeleteTarget(null);
+      load();
+    } catch {
+      toast.error('Failed to delete');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const columns = [
     { key: 'invoiceId', label: 'Invoice #', render: row => <span className="font-mono font-semibold">#{row.invoiceId}</span> },
     { key: 'customer', label: 'Customer', render: row => row.customer?.name || '—' },
-    { key: 'totalAmount', label: 'Total', render: row => <span className="font-semibold text-emerald-600">${Number(row.totalAmount).toFixed(2)}</span> },
+    { key: 'totalAmount', label: 'Total', render: row => <span className="font-semibold text-emerald-600">Rs. {Number(row.totalAmount).toLocaleString('en-LK', { minimumFractionDigits: 2 })}</span> },
     { key: 'date', label: 'Date' },
     { key: 'items', label: 'Items', render: row => `${row.items?.length || 0} items` },
   ];
@@ -107,7 +119,7 @@ export default function Invoices() {
                           className="p-1.5 text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100 rounded-lg transition-all">
                           <Eye size={14} />
                         </button>
-                        <button onClick={() => handleDelete(row)}
+                        <button onClick={() => setDeleteTarget(row)}
                           className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
                           <Trash2 size={14} />
                         </button>
@@ -144,11 +156,11 @@ export default function Invoices() {
                   <select className="input flex-1" value={item.productId}
                     onChange={e => updateItem(i, 'productId', e.target.value)}>
                     <option value="">Select product...</option>
-                    {products.map(p => <option key={p.productId} value={p.productId}>{p.name} (${p.price})</option>)}
+                    {products.map(p => <option key={p.productId} value={p.productId}>{p.name} (Rs. {Number(p.price).toFixed(2)})</option>)}
                   </select>
                   <input type="number" min="1" className="input w-20" value={item.quantity}
                     onChange={e => updateItem(i, 'quantity', e.target.value)} placeholder="Qty" />
-                  <span className="text-sm font-semibold text-emerald-600 w-20 text-right">${getItemSubtotal(item).toFixed(2)}</span>
+                  <span className="text-sm font-semibold text-emerald-600 w-28 text-right">Rs. {getItemSubtotal(item).toFixed(2)}</span>
                   {items.length > 1 && (
                     <button type="button" onClick={() => removeItem(i)} className="p-1.5 text-red-400 hover:text-red-600 rounded-lg">
                       <Trash2 size={14} />
@@ -161,7 +173,7 @@ export default function Invoices() {
 
           <div className="flex justify-between items-center border-t border-indigo-50 pt-4">
             <span className="text-sm text-gray-500">Total Amount</span>
-            <span className="text-xl font-display font-bold text-emerald-600">${total.toFixed(2)}</span>
+            <span className="text-xl font-display font-bold text-emerald-600">Rs. {total.toLocaleString('en-LK', { minimumFractionDigits: 2 })}</span>
           </div>
 
           <div className="flex gap-3">
@@ -170,6 +182,16 @@ export default function Invoices() {
           </div>
         </form>
       </Modal>
+
+      <ConfirmDeleteModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Delete Invoice"
+        itemName={deleteTarget ? `Invoice #${deleteTarget.invoiceId}` : ''}
+        description="Are you sure you want to delete this invoice? This will remove the invoice record from your sales history."
+        loading={deleting}
+      />
     </>
   );
 }
