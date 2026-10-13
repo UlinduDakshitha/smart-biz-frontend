@@ -97,3 +97,25 @@
 .slide-in {
   animation: slideIn 0.25s ease forwards;
 }
+
+/* Print Optimization (Clean white background for invoice printing) */
+@media print {
+  html.dark,
+  html.dark body,
+  html.dark .card,
+  html.dark .bg-white {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  html.dark .text-indigo-900,
+  html.dark .text-gray-900,
+  html.dark .text-gray-800,
+  html.dark .text-gray-700 {
+    color: #000000 !important;
+  }
+  html.dark .border-indigo-50,
+  html.dark .border-gray-100,
+  html.dark .border-gray-200 {
+    border-color: #e5e7eb !important;
+  }
+}

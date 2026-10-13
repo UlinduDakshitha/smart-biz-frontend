@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
@@ -9,9 +10,16 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
+
     if (token && userData) {
-      setUser(JSON.parse(userData));
+      try {
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error('Failed to parse stored user data:', error);
+        localStorage.removeItem('user');
+      }
     }
+
     setLoading(false);
   }, []);
 
@@ -21,6 +29,20 @@ export function AuthProvider({ children }) {
     setUser(userData);
   };
 
+  // Update user details without changing the authentication token.
+  const updateUser = (updatedData) => {
+    setUser((currentUser) => {
+      const updatedUser = {
+        ...(currentUser || {}),
+        ...updatedData,
+      };
+
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      return updatedUser;
+    });
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -28,7 +50,16 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, isAdmin: user?.role === 'ADMIN' }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        updateUser,
+        loading,
+        isAdmin: user?.role === 'ADMIN',
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -64,7 +64,7 @@ export default function App() {
           {/* ── Public ── */}
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-          <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+         <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* ── Business ── */}
           <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>

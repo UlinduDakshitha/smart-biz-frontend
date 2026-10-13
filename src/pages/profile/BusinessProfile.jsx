@@ -38,7 +38,7 @@ const BUSINESS_TYPE_SUGGESTIONS = [
 ];
 
 export default function BusinessProfile() {
-  const { user } = useAuth();
+ const { user, updateUser } = useAuth();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -147,7 +147,26 @@ export default function BusinessProfile() {
         logoUrl: form.logoUrl.trim(),
         description: form.description.trim(),
       });
+const response = await businessProfileAPI.update({
+  name: form.name.trim(),
+  phone: form.phone.trim(),
+  address: form.address.trim(),
+  businessType: form.businessType.trim(),
+  registrationNumber: form.registrationNumber.trim(),
+  website: form.website.trim(),
+  logoUrl: form.logoUrl.trim(),
+  description: form.description.trim(),
+});
 
+const updatedBusiness = response.data?.data;
+
+if (updatedBusiness) {
+  updateUser({
+    name: updatedBusiness.name,
+    phone: updatedBusiness.phone,
+    address: updatedBusiness.address,
+  });
+}
       setInitialForm(form);
       toast.success('Business profile updated successfully! 🎉');
     } catch (error) {
