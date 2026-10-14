@@ -111,7 +111,18 @@ export const businessProfileAPI = {
     api.put('/business/profile', data),
 };
 
+ 
 export const subscriptionAPI = {
   getStatus: () => api.get('/subscription/status'),
+  getPlans: () => api.get('/subscription/plans'),
+  getPlans: () => api.get('/admin/subscriptions'),
+
+  requestUpgrade: (subscriptionId) =>
+    api.post(`/subscription/upgrade-request/${subscriptionId}`),
+
+  getMyUpgradeRequests: () =>
+    api.get('/subscription/upgrade-requests'),
 };
+
+ 
 export default api;
