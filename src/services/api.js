@@ -110,4 +110,8 @@ export const businessProfileAPI = {
   update: (data) =>
     api.put('/business/profile', data),
 };
+
+export const subscriptionAPI = {
+  getStatus: () => api.get('/subscription/status'),
+};
 export default api;
