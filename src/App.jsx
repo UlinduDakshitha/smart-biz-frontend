@@ -55,9 +55,77 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <Toaster position="top-right" toastOptions={{
-          style: { fontFamily: 'Inter, system-ui, sans-serif', borderRadius: '12px', fontSize: '14px' },
-        }} />
+        <Toaster
+          position="top-right"
+          gutter={12}
+          containerStyle={{
+            top: 24,
+            right: 24,
+            zIndex: 99999,
+          }}
+          toastOptions={{
+            duration: 4000,
+            className: 'smartbiz-toast',
+            style: {
+              fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
+              fontSize: '13.5px',
+              fontWeight: 600,
+              borderRadius: '16px',
+              padding: '12px 18px',
+              color: '#0f172a',
+              background: 'rgba(255, 255, 255, 0.96)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1px solid rgba(226, 232, 240, 0.9)',
+              boxShadow:
+                '0 20px 30px -10px rgba(15, 23, 42, 0.12), 0 0 1px 1px rgba(15, 23, 42, 0.05)',
+            },
+            success: {
+              duration: 3500,
+              iconTheme: {
+                primary: '#10b981',
+                secondary: '#ffffff',
+              },
+              style: {
+                background:
+                  'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 253, 244, 0.96) 100%)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                color: '#065f46',
+                boxShadow:
+                  '0 20px 35px -10px rgba(16, 185, 129, 0.22), 0 0 0 1px rgba(16, 185, 129, 0.12)',
+              },
+            },
+            error: {
+              duration: 4500,
+              iconTheme: {
+                primary: '#f43f5e',
+                secondary: '#ffffff',
+              },
+              style: {
+                background:
+                  'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 241, 242, 0.96) 100%)',
+                border: '1px solid rgba(244, 63, 94, 0.3)',
+                color: '#9f1239',
+                boxShadow:
+                  '0 20px 35px -10px rgba(244, 63, 94, 0.22), 0 0 0 1px rgba(244, 63, 94, 0.12)',
+              },
+            },
+            loading: {
+              iconTheme: {
+                primary: '#6366f1',
+                secondary: '#ffffff',
+              },
+              style: {
+                background:
+                  'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(238, 242, 255, 0.96) 100%)',
+                border: '1px solid rgba(99, 102, 241, 0.3)',
+                color: '#3730a3',
+                boxShadow:
+                  '0 20px 35px -10px rgba(99, 102, 241, 0.22), 0 0 0 1px rgba(99, 102, 241, 0.12)',
+              },
+            },
+          }}
+        />
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
 

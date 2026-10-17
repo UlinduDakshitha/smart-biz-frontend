@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { dashboardAPI, subscriptionAPI } from '../../services/api';
+import { dashboardAPI, subscriptionAPI, paymentAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 import {
@@ -57,6 +57,8 @@ function SubscriptionCard({ subscription }) {
   const [loadingPlans, setLoadingPlans] = useState(false);
   const [submittingId, setSubmittingId] = useState(null);
   const [loadingRequests, setLoadingRequests] = useState(false);
+  const [currentPayment, setCurrentPayment] = useState(null);
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   const isActive = subscription?.status === 'ACTIVE';
   const isExpired = subscription?.status === 'EXPIRED';
@@ -124,21 +126,55 @@ function SubscriptionCard({ subscription }) {
     setSubmittingId(plan.subscriptionId);
 
     try {
-      await subscriptionAPI.requestUpgrade(plan.subscriptionId);
-      toast.success('Upgrade request submitted for admin approval.');
-      await loadRequests();
+      const response = await paymentAPI.createPayment(plan.subscriptionId);
+      const payment = response.data?.data ?? response.data;
+      setCurrentPayment(payment);
+      toast.success('Payment request created. Choose a test payment result.');
     } catch (error) {
       toast.error(
-        error.response?.data?.message || 'Failed to submit upgrade request.'
+        error.response?.data?.message || 'Failed to create payment request.'
       );
     } finally {
       setSubmittingId(null);
     }
   };
 
+  const simulatePayment = async (success) => {
+    if (!currentPayment?.paymentId) {
+      toast.error('Create a payment request first.');
+      return;
+    }
+
+    setProcessingPayment(true);
+    try {
+      const response = success
+        ? await paymentAPI.simulatePaymentSuccess(currentPayment.paymentId)
+        : await paymentAPI.simulatePaymentFailure(currentPayment.paymentId);
+      const payment = response.data?.data ?? response.data;
+      setCurrentPayment(payment);
+
+      if (success) {
+        toast.success('Test payment successful. Waiting for admin approval.');
+      } else {
+        toast.error('Test payment failed. You can create another payment request.');
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          'Could not process test payment. Check your login role and backend configuration.'
+      );
+    } finally {
+      setProcessingPayment(false);
+    }
+  };
+
   const pendingRequest = requests.find(
     (request) => request.status === 'PENDING'
   );
+
+  const paymentPendingApproval =
+    currentPayment?.paymentStatus === 'VERIFIED' &&
+    currentPayment?.approvalStatus === 'PENDING';
 
   const formatDate = (value) => {
     if (!value) return 'Not available';
@@ -244,7 +280,16 @@ function SubscriptionCard({ subscription }) {
           </div>
         )}
 
-        {pendingRequest && (
+        {paymentPendingApproval && (
+          <div className="mt-5 p-4 rounded-xl border border-amber-200 bg-amber-50">
+            <p className="text-sm font-semibold text-amber-800">Payment successful — pending admin approval</p>
+            <p className="text-sm text-amber-700 mt-1">
+              Plan: {currentPayment.subscription?.planName || plans.find((plan) => plan.subscriptionId === currentPayment.subscription?.subscriptionId)?.planName || 'Selected plan'}. Your subscription will be activated after an administrator approves the payment.
+            </p>
+          </div>
+        )}
+
+        {pendingRequest && !paymentPendingApproval && (
           <div className="mt-5 p-4 rounded-xl border border-amber-200 bg-amber-50">
             <p className="text-sm font-semibold text-amber-800">
               Upgrade request pending
@@ -332,24 +377,76 @@ function SubscriptionCard({ subscription }) {
                         <button
                           type="button"
                           disabled={
-                            Boolean(pendingRequest) ||
                             isCurrentPlan ||
-                            submittingId !== null
+                            submittingId !== null ||
+                            processingPayment
                           }
                           onClick={() => submitRequest(plan)}
                           className="w-full mt-5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
                         >
                           {submittingId === plan.subscriptionId
-                            ? 'Submitting...'
+                            ? 'Creating payment...'
                             : isCurrentPlan
                               ? 'Current Plan'
-                              : pendingRequest
-                                ? 'Request Pending'
-                                : 'Request Upgrade'}
+                              : currentPayment?.subscription?.subscriptionId === plan.subscriptionId && currentPayment?.paymentStatus === 'PENDING'
+                                ? 'Payment Created'
+                                : 'Create Payment'}
                         </button>
                       </div>
                     );
                   })}
+                </div>
+              )}
+
+              {currentPayment && (
+                <div className="mt-6 p-5 rounded-2xl border border-indigo-200 bg-indigo-50">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div>
+                      <h3 className="font-bold text-indigo-900">Development Test Payment</h3>
+                      <p className="text-sm text-indigo-800 mt-1">
+                        Payment #{currentPayment.paymentId} · {currentPayment.subscription?.planName || plans.find((plan) => plan.subscriptionId === currentPayment.subscription?.subscriptionId)?.planName || 'Selected plan'}
+                      </p>
+                      <p className="text-sm text-indigo-800 mt-1">
+                        Amount: {currentPayment.currency || 'LKR'} {Number(currentPayment.amount || 0).toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </p>
+                      <p className="text-sm mt-2 font-semibold">
+                        Payment status: {currentPayment.paymentStatus} · Approval: {currentPayment.approvalStatus}
+                      </p>
+                    </div>
+                    {currentPayment.paymentStatus === 'PENDING' && currentPayment.approvalStatus === 'PENDING' && (
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <button
+                          type="button"
+                          disabled={processingPayment}
+                          onClick={() => simulatePayment(true)}
+                          className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold disabled:opacity-50"
+                        >
+                          {processingPayment ? 'Processing...' : 'Test Payment Success'}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={processingPayment}
+                          onClick={() => simulatePayment(false)}
+                          className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold disabled:opacity-50"
+                        >
+                          Test Payment Failed
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  {paymentPendingApproval && (
+                    <p className="mt-3 text-sm text-amber-800 font-medium">
+                      Payment verified in test mode. Waiting for administrator approval.
+                    </p>
+                  )}
+                  {currentPayment.paymentStatus === 'FAILED' && (
+                    <p className="mt-3 text-sm text-rose-700">
+                      This test payment failed. Create a new payment request to try again.
+                    </p>
+                  )}
+                  <p className="mt-3 text-xs text-indigo-700">
+                    Mock payment is for development testing only; it does not process real money.
+                  </p>
                 </div>
               )}
 
