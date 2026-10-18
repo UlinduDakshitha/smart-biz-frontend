@@ -91,45 +91,90 @@ export default function Invoices() {
 
   return (
     <>
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-display font-bold text-indigo-900">Invoices</h1>
-          <button className="btn-primary flex items-center gap-2" onClick={() => setModal(true)}>
-            <Plus size={16} />New Invoice
+      <div className="w-full min-h-full flex flex-col bg-white">
+        <div className="px-6 sm:px-10 py-6 border-b border-gray-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-display font-black text-gray-900 tracking-tight">
+                Invoices
+              </h1>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                {data.length} {data.length === 1 ? 'invoice' : 'invoices'}
+              </span>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Issue, manage, and track customer billing invoices
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-extrabold shadow-sm shadow-indigo-600/20 transition-all self-start sm:self-auto"
+            onClick={() => setModal(true)}
+          >
+            <Plus size={16} />
+            <span>New Invoice</span>
           </button>
         </div>
-        <div className="card">
-          <div className="overflow-x-auto rounded-xl border border-indigo-50">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="table-header">
-                  {columns.map(col => <th key={col.key} className="px-4 py-3 text-left">{col.label}</th>)}
-                  <th className="px-4 py-3 text-right">Actions</th>
+
+        <div className="w-full overflow-x-auto flex-1">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-50/80 border-b border-gray-200/80 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                {columns.map(col => (
+                  <th key={col.key} className="px-6 sm:px-10 py-3.5 whitespace-nowrap">{col.label}</th>
+                ))}
+                <th className="px-6 sm:px-10 py-3.5 text-right whitespace-nowrap">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="py-24 text-center">
+                    <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                    <p className="text-xs text-gray-400 font-medium">Loading invoices...</p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {loading ? <tr><td colSpan={6} className="text-center py-12 text-gray-400">Loading...</td></tr>
-                : data.length === 0 ? <tr><td colSpan={6} className="text-center py-12 text-gray-400">No invoices yet</td></tr>
-                : data.map(row => (
-                  <tr key={row.invoiceId} className="border-t border-indigo-50 hover:bg-indigo-50/40 transition-colors">
-                    {columns.map(col => <td key={col.key} className="px-4 py-3 text-gray-700">{col.render ? col.render(row) : row[col.key]}</td>)}
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => navigate(`/invoices/${row.invoiceId}`)}
-                          className="p-1.5 text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100 rounded-lg transition-all">
-                          <Eye size={14} />
+              ) : data.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-24 text-center">
+                    <p className="text-sm font-bold text-gray-700">No invoices yet</p>
+                    <p className="text-xs text-gray-400 mt-1">Click "New Invoice" above to create your first customer invoice.</p>
+                  </td>
+                </tr>
+              ) : (
+                data.map(row => (
+                  <tr key={row.invoiceId} className="hover:bg-slate-50/70 transition-colors group">
+                    {columns.map(col => (
+                      <td key={col.key} className="px-6 sm:px-10 py-4 text-xs font-semibold text-gray-800 whitespace-nowrap">
+                        {col.render ? col.render(row) : row[col.key]}
+                      </td>
+                    ))}
+                    <td className="px-6 sm:px-10 py-4 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-1.5 opacity-80 group-hover:opacity-100">
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/invoices/${row.invoiceId}`)}
+                          title="View Invoice"
+                          className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                        >
+                          <Eye size={15} />
                         </button>
-                        <button onClick={() => setDeleteTarget(row)}
-                          className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
-                          <Trash2 size={14} />
+                        <button
+                          type="button"
+                          onClick={() => setDeleteTarget(row)}
+                          title="Delete Invoice"
+                          className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                        >
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 

@@ -72,11 +72,9 @@ export default function Expenses() {
 
   return (
     <>
-      <div className="px-8 pt-8">
-        <div className="card bg-gradient-to-r from-rose-50 to-red-50 border-rose-100 mb-0">
-          <p className="text-xs font-semibold text-rose-400 uppercase tracking-wider">Total Expenses (All Time)</p>
-          <p className="text-3xl font-display font-bold text-rose-600 mt-1">Rs. {totalExpenses.toLocaleString('en-LK', { minimumFractionDigits: 2 })}</p>
-        </div>
+      <div className="w-full px-6 sm:px-10 py-5 bg-gradient-to-r from-rose-50/80 via-red-50/40 to-white border-b border-rose-100/80">
+        <p className="text-xs font-bold text-rose-500 uppercase tracking-wider">Total Expenses (All Time)</p>
+        <p className="text-2xl sm:text-3xl font-display font-black text-rose-600 mt-1">Rs. {totalExpenses.toLocaleString('en-LK', { minimumFractionDigits: 2 })}</p>
       </div>
 
       <CrudTable title="Expenses" data={data} columns={columns} loading={loading}
