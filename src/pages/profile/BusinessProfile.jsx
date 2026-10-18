@@ -9,7 +9,6 @@ import {
   Phone,
   MapPin,
   Globe,
-  Image as ImageIcon,
   FileText,
   Hash,
   Briefcase,
@@ -20,7 +19,6 @@ import {
   ShieldCheck,
   CreditCard,
   Sparkles,
-  Camera,
   Copy,
   Check,
   AlertCircle
@@ -515,62 +513,7 @@ if (updatedBusiness) {
           </div>
         </div>
 
-        {/* Section 3: Visual Branding & Logo URL */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-            <div>
-              <h2 className="text-lg font-display font-bold text-gray-900 flex items-center gap-2">
-                <ImageIcon size={19} className="text-purple-600" />
-                Branding & Assets
-              </h2>
-              <p className="text-gray-400 text-xs mt-0.5">
-                Customize your brand logo for invoices, receipts, and client portal
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-start gap-6">
-            {/* Live Logo Preview Box */}
-            <div className="w-24 h-24 rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
-              {form.logoUrl && !logoLoadError ? (
-                <img
-                  src={form.logoUrl}
-                  alt="Brand preview"
-                  onError={() => setLogoLoadError(true)}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="text-center p-2">
-                  <Camera size={22} className="mx-auto text-gray-300 mb-1" />
-                  <span className="text-[10px] text-gray-400 font-bold block leading-tight">Preview</span>
-                </div>
-              )}
-            </div>
-
-            {/* Logo URL Input */}
-            <div className="flex-1 w-full space-y-2">
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                Logo Image Web URL
-              </label>
-              <div className="relative">
-                <ImageIcon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="url"
-                  name="logoUrl"
-                  value={form.logoUrl}
-                  onChange={handleChange}
-                  placeholder="https://example.com/assets/logo.png"
-                  className="w-full text-xs font-semibold bg-gray-50 border border-gray-200 rounded-2xl pl-10 pr-4 py-3 text-gray-900 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all"
-                />
-              </div>
-              <p className="text-[11px] text-gray-400">
-                Provide a direct HTTPS image URL (.png, .jpg, or .svg recommended)
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Section 4: Subscription & System Status */}
+        {/* Section 3: Subscription & System Status */}
         <div className="bg-gradient-to-r from-amber-500/10 via-indigo-500/5 to-purple-500/10 rounded-3xl border border-amber-200/50 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-md shadow-amber-500/20 shrink-0">
